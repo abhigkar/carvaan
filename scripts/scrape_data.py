@@ -1,4 +1,4 @@
-
+import json
 import requests
 
 url = "https://raw.githubusercontent.com/labnol/saregama-carvaan/master/artistes/songs.md"
@@ -24,4 +24,23 @@ for song_detail in scrape_data.iter_lines():
     songs_data.append(data)
 
 songs_data = songs_data[2:]
-# print(songs_data[0])
+# print(songs_data[59])
+
+dump_data = []
+
+for pk in range(1,len(songs_data)+1):
+    record = {}
+    record["model"] = "songs.Song"
+    record["pk"] = pk
+    
+    cover_art= songs_data[pk-1]["cover_art"]
+    url= songs_data[pk-1]["url"]
+    movie= songs_data[pk-1]["movie"]
+    artiste= songs_data[pk-1]["artiste"]
+
+    record["fields"] = { "cover_art": cover_art, "title": url, "movie":movie, "artiste":artiste  }
+
+    dump_data.append(record)
+
+with open('dump_data_song.json', 'w') as outfile:
+    json.dump(dump_data, outfile)
